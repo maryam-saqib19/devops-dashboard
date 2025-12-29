@@ -1,0 +1,19 @@
+services:
+  app:
+    image: maryam111saqib/devops-dashboard:1.0
+    container_name: laravel-app
+    env_file:
+      - .env
+    expose:
+      - "9000"
+
+  nginx:
+    image: nginx:alpine
+    container_name: nginx
+    ports:
+      - "8080:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - app
+
