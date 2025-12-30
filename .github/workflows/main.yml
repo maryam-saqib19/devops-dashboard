@@ -19,12 +19,10 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Build Docker image
-        run: |
-          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/devops-dashboard:latest .
+        run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/devops-dashboard:latest .
 
       - name: Push Docker image
-        run: |
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/devops-dashboard:latest
+        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/devops-dashboard:latest
 
   deploy:
     needs: build-and-push
@@ -34,10 +32,11 @@ jobs:
         uses: appleboy/ssh-action@v1.0.0
         with:
           host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USER }}
+          username: ec2-user
           key: ${{ secrets.EC2_SSH_KEY }}
+          port: 22
           script: |
             cd ~/devops-dashboard
-            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/devops-dashboard:latest
+            docker pull maryam-saqib19/devops-dashboard:latest
             docker-compose down
             docker-compose up -d
