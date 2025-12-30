@@ -19,10 +19,11 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Build Docker image
-        run: docker build -t maryam111saqib/devops-dashboard:latest
+        run: docker build -t maryam111saqib/devops-dashboard:latest .
 
       - name: Push Docker image
         run: docker push maryam111saqib/devops-dashboard:latest
+
   deploy:
     needs: build-and-push
     runs-on: ubuntu-latest
@@ -37,5 +38,5 @@ jobs:
           script: |
             cd ~/devops-dashboard
             docker pull maryam111saqib/devops-dashboard:latest
-            docker-compose down
-            docker-compose up -d
+            docker compose down
+            docker compose up -d
